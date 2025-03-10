@@ -32,7 +32,7 @@ function App() {
             fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
             fontWeight="bold"
           >
-            Azure AI Solution Accelerator Finder
+            Solution Accelerator Search
           </Heading>
           <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           <FilterSection selectedTags={selectedTags} onTagToggle={handleTagToggle} />
