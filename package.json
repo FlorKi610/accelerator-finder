@@ -2,7 +2,7 @@
   "name": "acc-find",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://florki610.github.io/Solution-Accelerator-Finder",
+  "homepage": "https://florki610.github.io/accelerator-finder",
   "dependencies": {
     "@chakra-ui/icons": "^2.2.4",
     "@chakra-ui/react": "^2.8.0",
