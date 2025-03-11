@@ -1,7 +1,6 @@
 {
   "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": ["/static/*", "/images/*", "/css/*", "/js/*", "/*.{png,jpg,gif,svg,ico}"]
+    "rewrite": "/index.html"
   },
   "responseOverrides": {
     "404": {
@@ -9,11 +8,17 @@
       "statusCode": 200
     }
   },
+  "mimeTypes": {
+    ".json": "text/json",
+    ".js": "text/javascript",
+    ".css": "text/css",
+    ".html": "text/html"
+  },
   "routes": [
     {
       "route": "/static/*",
       "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
+        "cache-control": "must-revalidate, max-age=15770000"
       }
     },
     {
