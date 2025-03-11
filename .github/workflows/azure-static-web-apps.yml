@@ -16,6 +16,7 @@ jobs:
     name: Build and Deploy Job
     steps:
       - uses: actions/checkout@v3
+      
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -35,7 +36,9 @@ jobs:
           app_location: "/" # App source code path
           api_location: "" # API source code path - leave empty if no API
           output_location: "build" # Built app content directory
+          skip_app_build: false
           app_build_command: "npm run build"
+          production_branch: "main"
           
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
