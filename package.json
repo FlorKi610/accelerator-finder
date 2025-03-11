@@ -2,7 +2,7 @@
   "name": "acc-find",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://fkitterer.github.io/acc-find",
+  "homepage": "https://green-island-035ba3d0f.6.azurestaticapps.net",
   "dependencies": {
     "@chakra-ui/icons": "^2.2.4",
     "@chakra-ui/react": "^2.8.0",

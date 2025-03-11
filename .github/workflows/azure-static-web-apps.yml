@@ -28,6 +28,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "/" # App source code path
+          api_location: "" # API source code path - leave empty if no API
           output_location: "build" # Built app content directory
           app_build_command: "npm run build"
           
