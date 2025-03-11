@@ -1,12 +1,15 @@
 import React from 'react';
-import { HStack, Tag, TagLabel, TagCloseButton, Wrap, WrapItem } from '@chakra-ui/react';
+import { Box, Wrap, WrapItem, Tag, TagLabel, TagCloseButton, Heading } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
+
+const MotionTag = motion(Tag);
 
 interface FilterSectionProps {
   selectedTags: string[];
   onTagToggle: (tag: string) => void;
 }
 
-export const FilterSection = ({ selectedTags, onTagToggle }: FilterSectionProps) => {
+export const FilterSection: React.FC<FilterSectionProps> = ({ selectedTags, onTagToggle }) => {
   const availableTags = [
     'Azure OpenAI',
     'Azure AI Search',
@@ -22,32 +25,48 @@ export const FilterSection = ({ selectedTags, onTagToggle }: FilterSectionProps)
   ];
 
   return (
-    <Wrap spacing={3} mb={6}>
-      {availableTags.map((tag) => (
-        <WrapItem key={tag}>
-          <Tag
-            size="lg"
-            borderRadius="full"
-            variant={selectedTags.includes(tag) ? "solid" : "subtle"}
-            colorScheme="blue"
-            cursor="pointer"
-            onClick={() => onTagToggle(tag)}
-            _hover={{
-              transform: 'translateY(-2px)',
-              shadow: 'md'
-            }}
-            transition="all 0.2s"
-          >
-            <TagLabel>{tag}</TagLabel>
-            {selectedTags.includes(tag) && (
-              <TagCloseButton onClick={(e) => {
-                e.stopPropagation();
-                onTagToggle(tag);
-              }} />
-            )}
-          </Tag>
-        </WrapItem>
-      ))}
-    </Wrap>
+    <Box mb={8}>
+      <Heading size="sm" mb={4} color="gray.700">
+        Filter by Technology
+      </Heading>
+      <Wrap spacing={3}>
+        {availableTags.map((tag) => (
+          <WrapItem key={tag}>
+            <MotionTag
+              size="lg"
+              borderRadius="full"
+              variant={selectedTags.includes(tag) ? "solid" : "subtle"}
+              colorScheme="brand"
+              cursor="pointer"
+              onClick={() => onTagToggle(tag)}
+              whileTap={{ scale: 0.95 }}
+              whileHover={{
+                y: -2,
+                boxShadow: "0 4px 6px rgba(0,0,0,0.1)"
+              }}
+              transition={{ type: "spring", stiffness: 500 }}
+              px={4}
+              py={2}
+              fontWeight="medium"
+              opacity={selectedTags.length > 0 && !selectedTags.includes(tag) ? 0.6 : 1}
+            >
+              <TagLabel>{tag}</TagLabel>
+              {selectedTags.includes(tag) && (
+                <TagCloseButton 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onTagToggle(tag);
+                  }}
+                  ml={2}
+                  _hover={{
+                    bg: 'rgba(255, 255, 255, 0.2)'
+                  }}
+                />
+              )}
+            </MotionTag>
+          </WrapItem>
+        ))}
+      </Wrap>
+    </Box>
   );
 };

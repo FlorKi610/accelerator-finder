@@ -286,8 +286,8 @@ export const AcceleratorList = ({ searchQuery, selectedTags }: AcceleratorListPr
   }, [searchQuery, selectedTags]);
 
   return (
-    <VStack spacing={6} width="100%">
-      <Box position="absolute" top="4" right="4">
+    <VStack spacing={6} width="100%" position="relative">
+      <Box position="absolute" top="0" right="0">
         <Badge colorScheme="blue" fontSize="md" p={2} borderRadius="md">
           {filteredAccelerators.length} Solutions
         </Badge>

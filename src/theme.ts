@@ -5,24 +5,47 @@ export const theme = extendTheme({
     global: {
       body: {
         bg: 'gray.50',
+        color: 'gray.800',
       },
+    },
+  },
+  colors: {
+    brand: {
+      50: '#E5F0FF',
+      100: '#B8D4FF',
+      200: '#8AB8FF',
+      300: '#5C9CFF',
+      400: '#2E80FF',
+      500: '#0064FF',
+      600: '#0050CC',
+      700: '#003C99',
+      800: '#002866',
+      900: '#001433',
     },
   },
   components: {
     Button: {
       baseStyle: {
-        borderRadius: 'full',
+        borderRadius: 'lg',
+        fontWeight: 'medium',
+        _hover: {
+          transform: 'translateY(-1px)',
+          boxShadow: 'sm',
+        },
+        transition: 'all 0.2s',
       },
       variants: {
         solid: {
-          bg: 'blue.500',
+          bg: 'brand.500',
           color: 'white',
           _hover: {
-            bg: 'blue.600',
-            transform: 'translateY(-2px)',
-            boxShadow: 'lg',
+            bg: 'brand.600',
           },
-          transition: 'all 0.2s',
+        },
+        ghost: {
+          _hover: {
+            bg: 'gray.50',
+          },
         },
       },
     },
@@ -30,20 +53,24 @@ export const theme = extendTheme({
       variants: {
         outline: {
           field: {
+            borderRadius: 'lg',
             _focus: {
-              borderColor: 'blue.500',
-              boxShadow: '0 0 0 1px var(--chakra-colors-blue-500)',
+              borderColor: 'brand.500',
+              boxShadow: '0 0 0 1px var(--chakra-colors-brand-500)',
             },
           },
         },
       },
     },
-    Tag: {
+    Card: {
       baseStyle: {
         container: {
+          borderRadius: 'lg',
+          overflow: 'hidden',
           transition: 'all 0.2s',
           _hover: {
-            transform: 'translateY(-1px)',
+            transform: 'translateY(-2px)',
+            boxShadow: 'md',
           },
         },
       },
