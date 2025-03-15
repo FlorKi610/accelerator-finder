@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { SimpleGrid, Text, VStack, Box, Button, Textarea, Badge, HStack } from '@chakra-ui/react';
+import { SimpleGrid, Text, VStack, Box, Button, Textarea, Badge, HStack, Switch, FormControl, FormLabel, Collapse } from '@chakra-ui/react';
 import { AcceleratorCard } from './AcceleratorCard';
+import { RecommendationWizard } from './RecommendationWizard';
 
 interface AcceleratorListProps {
   searchQuery: string;
@@ -27,6 +28,8 @@ interface ScoredAccelerator extends Accelerator {
 export const AcceleratorList = ({ searchQuery, selectedTags }: AcceleratorListProps) => {
   const [useCaseDescription, setUseCaseDescription] = useState('');
   const [recommendedAccelerators, setRecommendedAccelerators] = useState<Accelerator[]>([]);
+  const [useWizard, setUseWizard] = useState(false);
+  const [wizardVisible, setWizardVisible] = useState(false);
 
   const accelerators: Accelerator[] = [
     {
@@ -576,6 +579,19 @@ export const AcceleratorList = ({ searchQuery, selectedTags }: AcceleratorListPr
     }
   };
 
+  const handleWizardComplete = (recommendations: Accelerator[]) => {
+    setRecommendedAccelerators(recommendations);
+    setWizardVisible(false);
+  };
+
+  const toggleRecommendationMode = () => {
+    setUseWizard(!useWizard);
+    // Reset state when switching modes
+    setUseCaseDescription('');
+    setRecommendedAccelerators([]);
+    setWizardVisible(false);
+  };
+
   const filteredAccelerators = useMemo(() => {
     return accelerators.filter(accelerator => {
       const matchesSearch = searchQuery === '' ||
@@ -601,30 +617,65 @@ export const AcceleratorList = ({ searchQuery, selectedTags }: AcceleratorListPr
 
       <Box width="100%" p={4} borderWidth="1px" borderRadius="lg">
         <VStack spacing={3}>
-          <Text fontSize="lg" fontWeight="bold">Get Recommendations (Beta)</Text>
-          <Textarea
-            placeholder="Describe your use case (e.g., 'I need to build a chatbot that can search through my company documents')"
-            value={useCaseDescription}
-            onChange={(e) => setUseCaseDescription(e.target.value)}
-            size="sm"
-            rows={3}
-          />
-          <HStack spacing={2} width="100%">
-            <Button colorScheme="blue" onClick={handleRecommend} flex="1">
-              Get Recommendations
-            </Button>
-            <Button 
-              variant="outline" 
-              onClick={() => {
-                setUseCaseDescription('');
-                setRecommendedAccelerators([]);
-              }}
-              isDisabled={!useCaseDescription && recommendedAccelerators.length === 0}
-            >
-              Clear
-            </Button>
+          <HStack width="100%" justifyContent="space-between">
+            <Text fontSize="lg" fontWeight="bold">Get Personalized Recommendations</Text>
+            <FormControl display="flex" alignItems="center" width="auto">
+              <FormLabel htmlFor="recommendation-mode" mb="0" fontSize="sm" mr={2}>
+                Step-by-Step
+              </FormLabel>
+              <Switch id="recommendation-mode" isChecked={useWizard} onChange={toggleRecommendationMode} colorScheme="blue" />
+            </FormControl>
           </HStack>
+          
+          {!useWizard ? (
+            <VStack spacing={3} width="100%">
+              <Textarea
+                placeholder="Describe your use case (e.g., 'I need to build a chatbot that can search through my company documents')"
+                value={useCaseDescription}
+                onChange={(e) => setUseCaseDescription(e.target.value)}
+                size="sm"
+                rows={3}
+              />
+              <HStack spacing={2} width="100%">
+                <Button colorScheme="blue" onClick={handleRecommend} flex="1">
+                  Get Recommendations
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    setUseCaseDescription('');
+                    setRecommendedAccelerators([]);
+                  }}
+                  isDisabled={!useCaseDescription && recommendedAccelerators.length === 0}
+                >
+                  Clear
+                </Button>
+              </HStack>
+            </VStack>
+          ) : (
+            <VStack spacing={3} width="100%">
+              <Text fontSize="sm" color="gray.600">
+                Our recommendation wizard will guide you through a series of questions to find your perfect solution accelerator.
+              </Text>
+              <Button 
+                colorScheme="blue" 
+                width="100%" 
+                onClick={() => setWizardVisible(!wizardVisible)}
+              >
+                {wizardVisible ? "Hide Wizard" : "Start Guided Recommendation"}
+              </Button>
+            </VStack>
+          )}
         </VStack>
+
+        <Collapse in={useWizard && wizardVisible} animateOpacity>
+          <Box mt={4}>
+            <RecommendationWizard 
+              onComplete={handleWizardComplete} 
+              accelerators={accelerators} 
+            />
+          </Box>
+        </Collapse>
 
         {recommendedAccelerators.length > 0 && (
           <VStack mt={4} align="stretch" spacing={4}>

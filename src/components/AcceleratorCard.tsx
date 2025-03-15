@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Heading, Text, HStack, Tag, Link, VStack, Icon, Badge, Flex } from '@chakra-ui/react';
+import { Box, Heading, Text, HStack, Tag, Link, VStack, Icon, Flex } from '@chakra-ui/react';
 import { ExternalLinkIcon, StarIcon } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
 
@@ -67,25 +67,9 @@ interface AcceleratorCardProps {
   accelerator: Accelerator;
 }
 
-// Helper function to calculate the use case fit
-const getUseCaseRating = (useCase?: { small: number, medium: number, large: number }): { label: string, color: string } => {
-  if (!useCase) return { label: "N/A", color: "gray.400" };
-  
-  const average = (useCase.small + useCase.medium + useCase.large) / 3;
-  
-  if (average >= 90) return { label: "Excellent", color: "green.500" };
-  if (average >= 80) return { label: "Very Good", color: "teal.500" };
-  if (average >= 70) return { label: "Good", color: "blue.500" };
-  if (average >= 60) return { label: "Fair", color: "yellow.500" };
-  return { label: "Basic", color: "orange.500" };
-};
-
 export const AcceleratorCard: React.FC<AcceleratorCardProps> = ({ accelerator }) => {
   // Get the color scheme from the first tag
   const primaryTagColor = accelerator.tags.length > 0 ? getTagColor(accelerator.tags[0]) : 'brand';
-  
-  // Calculate use case rating
-  const useCaseRating = getUseCaseRating(accelerator.useCase);
 
   return (
     <MotionBox
@@ -140,24 +124,6 @@ export const AcceleratorCard: React.FC<AcceleratorCardProps> = ({ accelerator })
         >
           {accelerator.description}
         </Text>
-
-        {accelerator.useCase && (
-          <Flex align="center" gap={2}>
-            <Text fontSize="xs" color="gray.500" fontWeight="medium">
-              Solution fit:
-            </Text>
-            <Badge 
-              colorScheme={useCaseRating.color.split('.')[0]} 
-              variant="subtle" 
-              px={2} 
-              py={0.5} 
-              borderRadius="full"
-              fontSize="xs"
-            >
-              {useCaseRating.label}
-            </Badge>
-          </Flex>
-        )}
 
         <Box>
           <HStack spacing={2} flexWrap="wrap" gap={2}>
