@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/accelerator-finder/static/js/main.35896c26.js",
+    "main.js": "/accelerator-finder/static/js/main.74fcddee.js",
     "index.html": "/accelerator-finder/index.html",
-    "main.35896c26.js.map": "/accelerator-finder/static/js/main.35896c26.js.map"
+    "main.74fcddee.js.map": "/accelerator-finder/static/js/main.74fcddee.js.map"
   },
   "entrypoints": [
-    "static/js/main.35896c26.js"
+    "static/js/main.74fcddee.js"
   ]
 }
