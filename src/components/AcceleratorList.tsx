@@ -613,7 +613,12 @@ export const AcceleratorList = ({ searchQuery, selectedTags }: AcceleratorListPr
       <Box width="100%" bg="white" p={6} borderRadius="lg" borderWidth="1px" borderColor="gray.200">
         <VStack spacing={3}>
           <HStack width="100%" justifyContent="space-between">
-            <Text fontSize="lg" fontWeight="bold">Get Personalized Recommendations</Text>
+            <HStack spacing={4}>
+              <Text fontSize="lg" fontWeight="bold">Get Personalized Recommendations</Text>
+              <Badge colorScheme="blue" fontSize="md" p={2} borderRadius="md">
+                {filteredAccelerators.length} Solutions
+              </Badge>
+            </HStack>
             <FormControl display="flex" alignItems="center" width="auto">
               <FormLabel htmlFor="recommendation-mode" mb="0" fontSize="sm" mr={2}>
                 Step-by-Step
@@ -686,29 +691,15 @@ export const AcceleratorList = ({ searchQuery, selectedTags }: AcceleratorListPr
 
       {/* All Accelerators Section */}
       <Box width="100%">
-        <Box position="relative" mb={4}>
-          <Badge colorScheme="blue" fontSize="md" p={2} borderRadius="md">
-            {filteredAccelerators.length} Solutions
-          </Badge>
-        </Box>
-        
-        {filteredAccelerators.length === 0 ? (
-          <VStack spacing={4}>
-            <Text fontSize="lg" color="gray.600">
-              No accelerators found matching your criteria.
-            </Text>
-          </VStack>
-        ) : (
-          <SimpleGrid 
-            columns={{ base: 1, md: 2, lg: 3, xl: 4 }} 
-            spacing={6}
-            width="100%"
-          >
-            {filteredAccelerators.map((accelerator) => (
-              <AcceleratorCard key={accelerator.url} accelerator={accelerator} />
-            ))}
-          </SimpleGrid>
-        )}
+        <SimpleGrid 
+          columns={{ base: 1, md: 2, lg: 3, xl: 4 }} 
+          spacing={6}
+          width="100%"
+        >
+          {filteredAccelerators.map((accelerator) => (
+            <AcceleratorCard key={accelerator.url} accelerator={accelerator} />
+          ))}
+        </SimpleGrid>
       </Box>
     </VStack>
   );
