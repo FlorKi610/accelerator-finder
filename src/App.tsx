@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Box, Heading, useColorModeValue, Text, IconButton, Flex, Image } from '@chakra-ui/react';
+import { Container, Box, Heading, useColorModeValue, Text, IconButton, VStack } from '@chakra-ui/react';
 import { ArrowUpIcon } from '@chakra-ui/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SearchBar } from './components/SearchBar';
@@ -7,7 +7,6 @@ import { FilterSection } from './components/FilterSection';
 import { AcceleratorList } from './components/AcceleratorList';
 import { Footer } from './components/Footer';
 
-// Trigger new deployment
 const MotionIconButton = motion(IconButton);
 
 function App() {
@@ -47,44 +46,40 @@ function App() {
         mb={8}
       >
         <Container maxW="container.xl" py={8}>
-          <Flex direction="column" align="center" justify="center">
-            <Heading 
-              as="h1" 
-              textAlign="center"
-              fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
-              fontWeight="bold"
-              letterSpacing="tight"
-              mb={2}
-              bgGradient="linear(to-r, brand.500, brand.700)"
-              bgClip="text"
-            >
-              Azure Solution Accelerator Finder
-            </Heading>
-            <Text
-              textAlign="center"
-              color="gray.600"
-              fontSize={{ base: "sm", md: "md" }}
-              mb={8}
-              maxW="800px"
-            >
-              Discover pre-built solutions and code samples to accelerate your Azure AI implementation
-            </Text>
+          <VStack spacing={8} align="stretch">
+            <VStack spacing={2}>
+              <Heading 
+                as="h1" 
+                textAlign="center"
+                fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+                fontWeight="bold"
+                letterSpacing="tight"
+                bgGradient="linear(to-r, brand.500, brand.700)"
+                bgClip="text"
+              >
+                Azure Solution Accelerator Finder
+              </Heading>
+              <Text
+                textAlign="center"
+                color="gray.600"
+                fontSize={{ base: "sm", md: "md" }}
+                maxW="800px"
+              >
+                Discover pre-built solutions and code samples to accelerate your Azure AI implementation
+              </Text>
+            </VStack>
+            
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-          </Flex>
+            <FilterSection selectedTags={selectedTags} onTagToggle={handleTagToggle} />
+          </VStack>
         </Container>
       </Box>
 
       <Container maxW="container.xl" px={{ base: 4, md: 8 }}>
-        <Box display={{ base: 'block', md: 'flex' }} alignItems="start">
-          <Box flex="1" order={{ base: 2, md: 1 }}>
-            <AcceleratorList searchQuery={searchQuery} selectedTags={selectedTags} />
-          </Box>
-          <Box w={{ base: '100%', md: '280px' }} mt={{ base: 8, md: 0 }} ml={{ md: 8 }} order={{ base: 1, md: 2 }}>
-            <FilterSection selectedTags={selectedTags} onTagToggle={handleTagToggle} />
-          </Box>
-        </Box>
+        <AcceleratorList searchQuery={searchQuery} selectedTags={selectedTags} />
         <Footer />
       </Container>
+
       <AnimatePresence>
         {showScrollButton && (
           <MotionIconButton
