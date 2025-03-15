@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { SimpleGrid, Text, VStack, Box, Button, Textarea, Badge, HStack, Switch, FormControl, FormLabel, Collapse } from '@chakra-ui/react';
+import { SimpleGrid, Text, VStack, Box, Button, Textarea, Badge, HStack, Switch, FormControl, FormLabel, Collapse, Grid, GridItem } from '@chakra-ui/react';
 import { AcceleratorCard } from './AcceleratorCard';
 import { RecommendationWizard } from './RecommendationWizard';
 
@@ -609,102 +609,109 @@ export const AcceleratorList = ({ searchQuery, selectedTags }: AcceleratorListPr
 
   return (
     <VStack spacing={6} width="100%" position="relative">
-      <Box position="absolute" top="0" right="0">
-        <Badge colorScheme="blue" fontSize="md" p={2} borderRadius="md">
-          {filteredAccelerators.length} Solutions
-        </Badge>
-      </Box>
-
-      <Box width="100%" p={4} borderWidth="1px" borderRadius="lg">
-        <VStack spacing={3}>
-          <HStack width="100%" justifyContent="space-between">
-            <Text fontSize="lg" fontWeight="bold">Get Personalized Recommendations</Text>
-            <FormControl display="flex" alignItems="center" width="auto">
-              <FormLabel htmlFor="recommendation-mode" mb="0" fontSize="sm" mr={2}>
-                Step-by-Step
-              </FormLabel>
-              <Switch id="recommendation-mode" isChecked={useWizard} onChange={toggleRecommendationMode} colorScheme="blue" />
-            </FormControl>
-          </HStack>
-          
-          {!useWizard ? (
-            <VStack spacing={3} width="100%">
-              <Textarea
-                placeholder="Describe your use case (e.g., 'I need to build a chatbot that can search through my company documents')"
-                value={useCaseDescription}
-                onChange={(e) => setUseCaseDescription(e.target.value)}
-                size="sm"
-                rows={3}
-              />
-              <HStack spacing={2} width="100%">
-                <Button colorScheme="blue" onClick={handleRecommend} flex="1">
-                  Get Recommendations
-                </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    setUseCaseDescription('');
-                    setRecommendedAccelerators([]);
-                  }}
-                  isDisabled={!useCaseDescription && recommendedAccelerators.length === 0}
-                >
-                  Clear
-                </Button>
+      <Grid templateColumns={{ base: '1fr', lg: '350px 1fr' }} gap={6} width="100%">
+        {/* Left column: Recommendation wizard */}
+        <GridItem>
+          <Box p={4} borderWidth="1px" borderRadius="lg" position="sticky" top="4">
+            <VStack spacing={3}>
+              <HStack width="100%" justifyContent="space-between">
+                <Text fontSize="lg" fontWeight="bold">Get Personalized Recommendations</Text>
+                <FormControl display="flex" alignItems="center" width="auto">
+                  <FormLabel htmlFor="recommendation-mode" mb="0" fontSize="sm" mr={2}>
+                    Step-by-Step
+                  </FormLabel>
+                  <Switch id="recommendation-mode" isChecked={useWizard} onChange={toggleRecommendationMode} colorScheme="blue" />
+                </FormControl>
               </HStack>
+              
+              {!useWizard ? (
+                <VStack spacing={3} width="100%">
+                  <Textarea
+                    placeholder="Describe your use case (e.g., 'I need to build a chatbot that can search through my company documents')"
+                    value={useCaseDescription}
+                    onChange={(e) => setUseCaseDescription(e.target.value)}
+                    size="sm"
+                    rows={3}
+                  />
+                  <HStack spacing={2} width="100%">
+                    <Button colorScheme="blue" onClick={handleRecommend} flex="1">
+                      Get Recommendations
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        setUseCaseDescription('');
+                        setRecommendedAccelerators([]);
+                      }}
+                      isDisabled={!useCaseDescription && recommendedAccelerators.length === 0}
+                    >
+                      Clear
+                    </Button>
+                  </HStack>
+                </VStack>
+              ) : (
+                <VStack spacing={3} width="100%">
+                  <Text fontSize="sm" color="gray.600">
+                    Our recommendation wizard will guide you through a series of questions to find your perfect solution accelerator.
+                  </Text>
+                  <Button 
+                    colorScheme="blue" 
+                    width="100%" 
+                    onClick={() => setWizardVisible(!wizardVisible)}
+                  >
+                    {wizardVisible ? "Hide Wizard" : "Start Guided Recommendation"}
+                  </Button>
+                </VStack>
+              )}
+
+              <Collapse in={useWizard && wizardVisible} animateOpacity>
+                <Box mt={4}>
+                  <RecommendationWizard 
+                    onComplete={handleWizardComplete} 
+                    accelerators={accelerators} 
+                  />
+                </Box>
+              </Collapse>
+
+              {recommendedAccelerators.length > 0 && (
+                <VStack mt={4} align="stretch" spacing={4}>
+                  <Text fontWeight="bold">Recommended Solutions:</Text>
+                  {recommendedAccelerators.map((acc) => (
+                    <AcceleratorCard key={acc.url} accelerator={acc} />
+                  ))}
+                </VStack>
+              )}
+            </VStack>
+          </Box>
+        </GridItem>
+
+        {/* Right column: All accelerators */}
+        <GridItem>
+          <Box position="relative" mb={4}>
+            <Badge colorScheme="blue" fontSize="md" p={2} borderRadius="md">
+              {filteredAccelerators.length} Solutions
+            </Badge>
+          </Box>
+          
+          {filteredAccelerators.length === 0 ? (
+            <VStack spacing={4}>
+              <Text fontSize="lg" color="gray.600">
+                No accelerators found matching your criteria.
+              </Text>
             </VStack>
           ) : (
-            <VStack spacing={3} width="100%">
-              <Text fontSize="sm" color="gray.600">
-                Our recommendation wizard will guide you through a series of questions to find your perfect solution accelerator.
-              </Text>
-              <Button 
-                colorScheme="blue" 
-                width="100%" 
-                onClick={() => setWizardVisible(!wizardVisible)}
-              >
-                {wizardVisible ? "Hide Wizard" : "Start Guided Recommendation"}
-              </Button>
-            </VStack>
+            <SimpleGrid 
+              columns={{ base: 1, xl: 2 }} 
+              spacing={6}
+              width="100%"
+            >
+              {filteredAccelerators.map((accelerator) => (
+                <AcceleratorCard key={accelerator.url} accelerator={accelerator} />
+              ))}
+            </SimpleGrid>
           )}
-        </VStack>
-
-        <Collapse in={useWizard && wizardVisible} animateOpacity>
-          <Box mt={4}>
-            <RecommendationWizard 
-              onComplete={handleWizardComplete} 
-              accelerators={accelerators} 
-            />
-          </Box>
-        </Collapse>
-
-        {recommendedAccelerators.length > 0 && (
-          <VStack mt={4} align="stretch" spacing={4}>
-            <Text fontWeight="bold">Recommended Solutions:</Text>
-            {recommendedAccelerators.map((acc) => (
-              <AcceleratorCard key={acc.url} accelerator={acc} />
-            ))}
-          </VStack>
-        )}
-      </Box>
-
-      {filteredAccelerators.length === 0 ? (
-        <VStack spacing={4} mt={8}>
-          <Text fontSize="lg" color="gray.600">
-            No accelerators found matching your criteria.
-          </Text>
-        </VStack>
-      ) : (
-        <SimpleGrid 
-          columns={{ base: 1, md: 2, lg: 3 }} 
-          spacing={6}
-          mt={4}
-          width="100%"
-        >
-          {filteredAccelerators.map((accelerator) => (
-            <AcceleratorCard key={accelerator.url} accelerator={accelerator} />
-          ))}
-        </SimpleGrid>
-      )}
+        </GridItem>
+      </Grid>
     </VStack>
   );
 };
